@@ -1,15 +1,19 @@
 import platform
 import os
-import sqlite3
+import csv
 import tkinter as Tk
+from edit import edit
 from about import *
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 
+pathbase = ''
+
+
 def browseFiles(): 
     global pathbase
-    pathbase =  filedialog.askopenfilename(initialdir = "/", title = "Select a File", filetypes = (("Database File", "*.db*"), ("all files", "*.*"))) 
+    pathbase =  filedialog.askopenfilename(initialdir = "/", title = "Select a File", filetypes = (("CSV File", "*.csv*"), ("all files", "*.*"))) 
     return pathbase
 
 
@@ -22,30 +26,14 @@ def generator():
 
 def create(name):
     global pathbase
+    pathbase = './PassGenerator/src/' +name+'.csv'
+    with open(pathbase, 'w', encoding='UTF8', newline='') as f:   
+        writer = csv.writer(f)
     
-    pathbase = './PassGenerator/src/' +name+'.db'
-    con1 = sqlite3.connect(pathbase)
-    cursor = con1.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, mail TEXT, username TEXT, password TEXT)")
-    con1.commit()
-    con1.close()
-    
-def edit():
-    global pathbase
-    con1 = sqlite3.connect(pathbase)
-    cursor = con1.cursor()
-    cursor.execute("""INSERT INTO users(mail, username, password) VALUES(?, ?, ?)""", ("test", "test", "test"))
-    
+
 def View():
     global pathbase
-    con1 = sqlite3.connect(pathbase)
-    cur1 = con1.cursor()
-    cur1.execute("SELECT * FROM users")
-    rows = cur1.fetchall()    
-    for row in rows:
-        print(row) 
-        tree.insert("", Tk.END, values=row)        
-    con1.close()
+
 
 def askname():
     sw = Tk()
@@ -65,7 +53,7 @@ def askname():
 
 
 fenetre = Tk()
-fenetre.title("Password Keeper")
+fenetre.title("PassMan")
 fenetre.geometry("650x300")
 
 
@@ -83,22 +71,18 @@ menubar.add_cascade(label="File", menu=menu1)
 
 menu2 = Menu(menubar, tearoff=0)
 menu2.add_command(label="Password Generator", command= lambda:generator())
-menu2.add_command(label="Edit Current base", command=lambda: edit())
+menu2.add_command(label="Edit Current base", command=lambda:edit(pathbase))
 menubar.add_cascade(label="Tools", menu=menu2)
 
 menu3 = Menu(menubar, tearoff=0)
-menu3.add_command(label="A propos", command=lambda : info())
-menubar.add_cascade(label="Aide", menu=menu3)
+menu3.add_command(label="About", command=lambda : info())
+menubar.add_cascade(label="Help", menu=menu3)
 
 fenetre.config(menu=menubar)
-
-tree = ttk.Treeview(fenetre, column=("c1", "c2", "c3"), show='headings')
-tree.column("#1", anchor=CENTER)
-tree.heading("#1", text="mail")
-tree.column("#2", anchor=CENTER)
-tree.heading("#2", text="username")
-tree.column("#3", anchor=CENTER)
-tree.heading("#3", text="password")
+tree = ttk.Treeview(fenetre, columns=("Service"))
+tree.heading('Service', text="Service", anchor=W)
+tree.column('#0', stretch=NO, minwidth=0, width=0)
+tree.column('#1', stretch=NO, minwidth=0, width=600)
 tree.pack()
 
 button1 = Button(text="Display data", command=View)

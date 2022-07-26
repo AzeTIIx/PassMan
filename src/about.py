@@ -1,3 +1,3 @@
 from tkinter import messagebox
 def info():
-    messagebox.showinfo("Message info", "Ceci est un message d'information")
+    messagebox.showinfo("Infos", "By Charles AIMIN\n Visit my github : https://github.com/CharlesAIMIN/PassMan")
