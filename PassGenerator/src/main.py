@@ -5,7 +5,6 @@ from edit import edit
 from passgen import *
 from about import *
 from tkinter import *
-from tkinter import ttk
 from tkinter import filedialog
 
 pathbase = ''
@@ -48,7 +47,6 @@ def browseFiles():
     with open ("./PassGenerator/src/lastfile.txt", "w") as f:
         f.write(pathbase)
     read()
-    return pathbase
 
 
 def create(name):
@@ -58,15 +56,16 @@ def create(name):
         f.write(pathbase)
     with open(pathbase, 'w', encoding='UTF8', newline='') as f:   
         writer = csv.writer(f)
-    read()
+
     
 
 def Update():
-    read()
+    
     index = listbox1.curselection()[0]
     Mail2.config(text = data[index][1])
     Username2.config(text = data[index][2])
     Password2.config(text = data[index][3])
+
     
 
 def askname():
@@ -89,9 +88,13 @@ def askname():
 fenetre = Tk()
 fenetre.title("PassMan")
 fenetre.geometry("600x300")
+fenetre.wm_iconbitmap('./PassGenerator/src/ic.ico')
 
 
 menubar = Menu(fenetre)
+
+saved()
+read()
 
 menu1 = Menu(menubar, tearoff=0)
 menu1.add_command(label="New file", command=lambda:askname())
@@ -102,9 +105,13 @@ menu1.add_command(label="Exit", command=fenetre.quit)
 menubar.add_cascade(label="File", menu=menu1)
 
 
+
+
+
 menu2 = Menu(menubar, tearoff=0)
 menu2.add_command(label="Password Generator", command=lambda:threading.Thread(passw()))
 menu2.add_command(label="Edit Current base", command=lambda:threading.Thread(edit(pathbase)))
+
 menubar.add_cascade(label="Tools", menu=menu2)
 
 menu3 = Menu(menubar, tearoff=0)
@@ -114,28 +121,26 @@ menubar.add_cascade(label="Help", menu=menu3)
 fenetre.config(menu=menubar)
 
 
-saved()
-read()
-print(list_of_services)
-var = StringVar(value=list_of_services)
-listbox1 = Listbox(fenetre, listvariable=var, width= 75)
-listbox1.grid(row=1, column=2)
-
 
 button1 = Button(text="Display data", command=Update)
 button1.place(x=100, y=75)
 button1.grid(row=4, column=2, pady=10)
 
-Mail = Label(fenetre, text="Mail").grid(row= 6, column=0, sticky="w")
-Username = Label(fenetre, text="Username").grid(row= 7, column=0, sticky="w")
-Password = Label(fenetre, text="Password").grid(row= 8, column=0, sticky="w")
+var = StringVar(value=list_of_services)
+listbox1 = Listbox(fenetre, listvariable=var, width= 75)
+listbox1.grid(row=1, column=2)
+
+Mail = Label(fenetre, text="Mail : ").grid(row= 6, column=0, sticky="w")
+Username = Label(fenetre, text="Username : ").grid(row= 7, column=0, sticky="w")
+Password = Label(fenetre, text="Password : ").grid(row= 8, column=0, sticky="w")
 
 Mail2 = Label(fenetre, text="")
-Mail2.grid(row= 6, column=3, sticky="w")
+Mail2.grid(row= 6, column=2, sticky="w")
 Username2 = Label(fenetre, text="")
-Username2.grid(row= 7, column=3, sticky="w")
+Username2.grid(row= 7, column=2, sticky="w")
 Password2 = Label(fenetre, text="")
-Password2.grid(row= 8, column=3, sticky="w")
+Password2.grid(row= 8, column=2, sticky="w")
 
 if __name__ =='__main__':
+
     fenetre.mainloop()
