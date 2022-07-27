@@ -16,7 +16,6 @@ def edit(pathbase):
     def save():
         with open(pathbase, 'a', encoding='UTF8', newline='') as f:   
             Writer=csv.writer(f)
-            Writer.writerow(["service","mail","username","password"])
             Writer.writerows(main_lst)
             messagebox.showinfo("Information","Saved succesfully")
     def Clear():

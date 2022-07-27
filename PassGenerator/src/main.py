@@ -1,5 +1,3 @@
-import platform
-import os
 import csv
 import threading
 import tkinter as Tk
@@ -14,7 +12,7 @@ pathbase = ''
 list_of_services = []
 
 def read():
-    global data, pathbase
+    global data, pathbase, list_of_services
     print(pathbase)
     file = open(pathbase)
     reader = csv.reader(file)
@@ -22,17 +20,18 @@ def read():
 
     for x in list(range(0, len(data))):
         list_of_services.append(data[x][0])
+    
+    return list_of_services
         
 def saved():
     global pathbase
     f = open("./PassGenerator/src/lastfile.txt", "r")
-    
     if not './PassGeneraor/src' in f.read():
         pathbase = './PassGenerator/src/test.csv'
         return pathbase 
     else :
-        pathbase = f.readline(1)
-        print(pathbase)
+        print(f.readline())
+        pathbase = f.readline()
         return pathbase
 
 def save():
@@ -48,6 +47,7 @@ def browseFiles():
     pathbase =  filedialog.askopenfilename(initialdir = "/", title = "Select a File", filetypes = (("CSV File", "*.csv*"), ("all files", "*.*"))) 
     with open ("./PassGenerator/src/lastfile.txt", "w") as f:
         f.write(pathbase)
+    read()
     return pathbase
 
 
@@ -58,13 +58,15 @@ def create(name):
         f.write(pathbase)
     with open(pathbase, 'w', encoding='UTF8', newline='') as f:   
         writer = csv.writer(f)
+    read()
     
 
 def Update():
+    read()
     index = listbox1.curselection()[0]
-    Mail2.config(text = data[index][0])
-    Username2.config(text = data[index][1])
-    Password2.config(text = data[index][2])
+    Mail2.config(text = data[index][1])
+    Username2.config(text = data[index][2])
+    Password2.config(text = data[index][3])
     
 
 def askname():
@@ -111,6 +113,10 @@ menubar.add_cascade(label="Help", menu=menu3)
 
 fenetre.config(menu=menubar)
 
+
+saved()
+read()
+print(list_of_services)
 var = StringVar(value=list_of_services)
 listbox1 = Listbox(fenetre, listvariable=var, width= 75)
 listbox1.grid(row=1, column=2)
@@ -132,6 +138,4 @@ Password2 = Label(fenetre, text="")
 Password2.grid(row= 8, column=3, sticky="w")
 
 if __name__ =='__main__':
-    saved()
-    read()
     fenetre.mainloop()
