@@ -14,7 +14,6 @@ list_of_services = []
 
 def read():
     global data, pathbase, list_of_services
-    print(pathbase)
     file = open(pathbase)
     reader = csv.reader(file)
     data = list(reader)
@@ -43,7 +42,7 @@ def save():
             messagebox.showwarning("Succeed", "File Saved")
 
 def browseFiles(): 
-    global pathbase
+    global pathbase, data
     pathbase =  filedialog.askopenfilename(initialdir = "/", title = "Select a File", filetypes = (("CSV File", "*.csv*"), ("all files", "*.*"))) 
     with open ("./PassGenerator/src/lastfile.txt", "w") as f:
         f.write(pathbase)
@@ -71,6 +70,7 @@ def delete_item():
         data = data.drop([first_column], axis=1)
         data.to_csv(pathbase, header=True, index = False)   
         
+        
     lines = list()
     rownumbers_to_remove= index
 
@@ -87,8 +87,12 @@ def delete_item():
     delete_empty_rows(pathbase)
     delete_col(pathbase)
 
+
+
+
+
 def create(name):
-    global pathbase
+    global pathbase, data
     pathbase = './PassGenerator/src/' + name +'.csv'
     with open ("./PassGenerator/src/lastfile.txt", "w") as f:
         f.write(pathbase)
@@ -105,6 +109,9 @@ def create(name):
 
 def Update():
     global index
+    file = open(pathbase)
+    reader = csv.reader(file)
+    data = list(reader)
     index = listbox1.curselection()[0]
     Mail2.config(text = data[index][1])
     Username2.config(text = data[index][2])
