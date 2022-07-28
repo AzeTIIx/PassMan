@@ -8,7 +8,7 @@ main_lst = []
 def edit(pathbase, listbox1, list_of_services):
     window=Toplevel()
     window.title("Data Entry")
-    window.geometry("450x250")
+    window.geometry("380x210")
     def add():
         global lst
         lst = [service.get(), mail.get(), username.get(), password.get()]
