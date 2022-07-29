@@ -7,6 +7,8 @@ from about import *
 from tkinter import *
 from tkinter import filedialog
 import pandas as pd
+import glob
+import os.path
 
 
 pathbase = ''
@@ -25,21 +27,19 @@ def read():
         
 def saved():
     global pathbase
-    f = open("./PassGenerator/src/lastfile.txt", "r")
-    if not './PassGeneraor/src' in f.read():
-        pathbase = './PassGenerator/src/test.csv'
-        return pathbase 
-    else :
-        print(f.readline())
-        pathbase = f.readline()
-        return pathbase
+    pathbase = './PassGenerator/src/'
+    file_type = r'\*csv'
+    files = glob.glob(pathbase + file_type)
+    pathbase = max(files, key=os.path.getctime)
+    print(pathbase)
+    return pathbase
 
 def save():
     with open ("./PassGenerator/src/lastfile.txt", "w") as f:
         f.write(pathbase)
     with open ("./PassGenerator/src/lastfile.txt", "r") as f:   
         if pathbase in f.read():
-            messagebox.showwarning("Succeed", "File Saved")
+            messagebox.showwarning("Success", "File Saved")
 
 def browseFiles(): 
     global pathbase, data
@@ -53,7 +53,9 @@ def browseFiles():
     data = list(reader)
     for x in list(range(0, len(data))):    
         list_of_services.append(data[x][0])
-        listbox1.insert(END, list_of_services)
+        listbox1.insert(END, list_of_services[-1])
+        print(list_of_services)
+  
 
 def delete_item():
     index = listbox1.curselection()
@@ -86,10 +88,6 @@ def delete_item():
         
     delete_empty_rows(pathbase)
     delete_col(pathbase)
-
-
-
-
 
 def create(name):
     global pathbase, data
