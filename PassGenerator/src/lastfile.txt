@@ -1,1 +1,1 @@
-C:/Users/aimin/Desktop/Python/PassGenerator/src/test.csv
+./PassGenerator/src\test.csv
